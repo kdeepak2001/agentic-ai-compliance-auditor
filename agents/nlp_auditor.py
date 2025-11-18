@@ -1,12 +1,13 @@
-from google.adk.core import Agent, Message
+# agents/nlp_auditor.py
+# Lightweight local agent skeleton (no ADK dependency)
+# Keeps the async on_message(interface) used by the orchestrator.
 
-class NLPAuditorAgent(Agent):
+class NLPAuditorAgent:
     def __init__(self):
-        super().__init__()
+        pass
 
-    async def on_message(self, message: Message) -> str:
-        # Placeholder NLP auditor: in later steps we'll add embeddings, RAG, etc.
-        text = message.text or ""
-        # simple token count as a placeholder "analysis"
+    async def on_message(self, message: str) -> str:
+        # Placeholder NLP auditor: simple token count
+        text = message or ""
         token_count = len(text.split())
         return f"nlp_auditor: token_count={token_count}"

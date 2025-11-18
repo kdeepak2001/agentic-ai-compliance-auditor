@@ -1,14 +1,9 @@
-from google.adk.core import Agent, Message
-
-class PrivacyAgent(Agent):
+# agents/privacy_agent.py
+class PrivacyAgent:
     def __init__(self):
-        super().__init__()
+        pass
 
-    async def on_message(self, message: Message) -> str:
-        # Placeholder privacy check: will later include regex + model-based PII detection
-        text = message.text or ""
-        found_pii = False
-        # trivial heuristic: presence of "@" indicates an email -> PII
-        if "@" in text:
-            found_pii = True
+    async def on_message(self, message: str) -> str:
+        text = message or ""
+        found_pii = "@" in text or "ssn" in text.lower()
         return f"privacy_agent: found_pii={found_pii}"

@@ -1,9 +1,8 @@
 # orchestrator/orchestrator.py
 import asyncio
 import json
-from google.adk.core import Message
 
-# import agent classes from agents package
+# import the lightweight agent classes
 from agents.nlp_auditor import NLPAuditorAgent
 from agents.privacy_agent import PrivacyAgent
 from agents.bias_agent import BiasAgent
@@ -12,13 +11,11 @@ from agents.report_agent import ReportAgent
 
 class ComplianceOrchestrator:
     """
-    Minimal orchestrator that instantiates agents and dispatches
-    incoming messages to them in parallel, then aggregates results.
-    This is a local/demo friendly orchestrator (no ADK runtime started).
+    Local orchestrator using plain async agent classes (no ADK).
+    Each agent exposes async on_message(message: str) -> str
     """
 
     def __init__(self):
-        # instantiate agents
         self.agents = {
             "nlp": NLPAuditorAgent(),
             "privacy": PrivacyAgent(),
@@ -28,15 +25,9 @@ class ComplianceOrchestrator:
         }
 
     async def dispatch(self, text: str) -> dict:
-        """
-        Send the same message to all agents concurrently and collect responses.
-        Returns a dictionary of agent_name -> response_text
-        """
-        msg = Message(text=text)
-
         async def call_agent(name: str, agent):
             try:
-                result = await agent.on_message(msg)
+                result = await agent.on_message(text)
             except Exception as e:
                 result = f"ERROR: {e}"
             return name, result
@@ -45,7 +36,6 @@ class ComplianceOrchestrator:
         pairs = await asyncio.gather(*tasks)
         return {name: res for name, res in pairs}
 
-# Demo runner for quick local test
 async def demo_run():
     orch = ComplianceOrchestrator()
     test_text = (
