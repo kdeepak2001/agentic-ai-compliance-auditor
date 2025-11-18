@@ -1,7 +1,7 @@
 # orchestrator/orchestrator.py
 import asyncio
 import json
-from google_adk.core import Message
+from google.agents.core import Message
 
 # import agent classes from agents package
 from agents.nlp_auditor import NLPAuditorAgent

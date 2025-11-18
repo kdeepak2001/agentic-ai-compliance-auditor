@@ -1,4 +1,4 @@
-from google_adk.core import Agent, Message
+from google.agents.core import Agent, Message
 
 class BiasAgent(Agent):
     def __init__(self):
